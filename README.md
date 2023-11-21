@@ -22,10 +22,6 @@ TODO: Write usage instructions
 
 TODO: Write history
 
-## Credits
-
-Rodrigo Rocha de Freitas
-
 ## License
 
 MIT
