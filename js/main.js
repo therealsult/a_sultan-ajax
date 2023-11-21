@@ -1,111 +1,126 @@
 (() => {
-  // variables
+
+  //variables
   const model = document.querySelector("#model");
   const hotspots = document.querySelectorAll(".Hotspot");
+
+  const hotspotTemplate = document.querySelector("#hotspot-template");
 
   const materialTemplate = document.querySelector("#material-template");
   const materialList = document.querySelector("#material-list");
 
-  // URLs for API calls
-  const infoBoxesUrl = "https://swiftpixel.com/earbud/api/infoboxes";
-  const materialsUrl = "https://swiftpixel.com/earbud/api/materials";
+  const materialCon = document.querySelector("#material-con");
 
-  // functions
-  function handleAjaxError(xhr, textStatus, errorThrown) {
-    console.error("AJAX request failed:");
-    console.error("Status: " + textStatus);
-    console.error("Error: " + errorThrown);
-    // You can perform additional actions here, such as showing an error message to the user.
+  //functions
+  function modelLoaded() {
+    hotspots.forEach(hotspot => {
+      hotspot.style.display = "block";
+    });
   }
 
   function loadInfoBoxes() {
-    fetch(infoBoxesUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then(infoBoxes => {
-        console.log(infoBoxes);
 
-        infoBoxes.forEach((infoBox, index) => {
-          const selected = document.querySelector(`#hotspot-${index + 1}`);
+    //Using fetch to connect with Marco's API
 
-          if (selected) { // Check if the selected element exists
-            // Clear existing content
-            selected.innerHTML = "";
+    fetch("https://swiftpixel.com/earbud/api/infoboxes")
+    .then(response => response.json())
+    .then(infoBoxesGet => {
+      console.log(infoBoxesGet);
 
-            const titleElement = document.createElement('h2');
-            titleElement.textContent = infoBox.heading;
+      infoBoxesGet.forEach((infoboxes, index) => {
 
-            const textElement = document.createElement('p');
-            textElement.textContent = infoBox.description;
+        const clone = hotspotTemplate.content.cloneNode(true);
 
-            selected.appendChild(titleElement);
-            selected.appendChild(textElement);
-          } else {
-            console.warn(`Hotspot not found for index ${index + 1}`);
-          }
+        let selected = document.querySelector(`#hotspot-${index+1}`);
+
+        const hotspotImage = clone.querySelector(".hotspot-img");
+        hotspotImage.src = `images/${infoboxes.thumbnail}`;
+  
+        const hotspotTitle = clone.querySelector(".title-hotspot");
+        hotspotTitle.textContent = infoboxes.heading;
+  
+        const hotspotText = clone.querySelector(".p-hotspot");
+        hotspotText.textContent = infoboxes.description;
+        
+        selected.appendChild(hotspotImage);
+        selected.appendChild(hotspotTitle);
+        selected.appendChild(hotspotText);
+    });
+
+    })
+
+        //Error handling
+        .catch(error => {
+          document.body.innerHTML = `Unable to load content. Please try again later... || Error message: ${error}`;
+          console.error("Unexpected Error:", error)
         });
-      })
-      .catch(error => handleAjaxError(null, null, error));
   }
+  
+  loadInfoBoxes();
 
   function loadMaterialInfo() {
-    fetch(materialsUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then(materialvar => {
-        console.log(materialvar);
+    //displays a spinner while waiting for the API
 
-        materialvar.forEach(material => {
-          const clone = materialTemplate.content.cloneNode(true);
+    materialCon.classList.add("spinner");
 
-          const materialHeading = clone.querySelector(".material-heading");
-          materialHeading.textContent = material.heading;
+    //Using fetch to connect with Marco's API
+    fetch("https://swiftpixel.com/earbud/api/materials")
+    .then(response => response.json())
+    .then(materialInfo => {
+      console.log(materialInfo);
+      
+      materialInfo.forEach(material => {
 
-          const materialDescription = clone.querySelector(".material-description");
-          materialDescription.textContent = material.description;
+        materialCon.classList.remove("spinner");
 
-          materialList.appendChild(clone);
-        });
-      })
-      .catch(error => handleAjaxError(null, null, error));
+      //make a copy of the template
+      const clone = materialTemplate.content.cloneNode(true);
+
+      //fill the template
+      const materialHeading = clone.querySelector(".material-heading");
+      materialHeading.textContent = material.heading;
+
+      const materialDescription = clone.querySelector(".material-description");
+      materialDescription.textContent = material.description;
+
+      //append the populated template to the ul
+      
+      materialList.appendChild(clone);
+
+    });
+
+      
+
+    })
+
+    //Error handing
+
+    .catch(error => {
+      document.body.innerHTML = `Unable to load content. Please try again later... || Error message: ${error}`;
+      console.error("Unexpected Error:", error)
+    });
+
   }
+
+  loadMaterialInfo();
 
   function showInfo() {
     let selected = document.querySelector(`#${this.slot}`);
     gsap.to(selected, 1, { autoAlpha: 1 });
-  
-    // Set the data-visible attribute to make the hotspot visible
-    selected.setAttribute('data-visible', 'true');
   }
-  
+
   function hideInfo() {
     let selected = document.querySelector(`#${this.slot}`);
     gsap.to(selected, 1, { autoAlpha: 0 });
-  
-    // Remove the data-visible attribute to hide the hotspot
-    selected.removeAttribute('data-visible');
   }
-  
-  // Event listeners
-  model.addEventListener("load", () => {
-    loadInfoBoxes();
-    loadMaterialInfo();
-  });
+
+  //Event listeners
+  model.addEventListener("load", modelLoaded);
 
   hotspots.forEach(function (hotspot) {
     hotspot.addEventListener("mouseenter", showInfo);
     hotspot.addEventListener("mouseleave", hideInfo);
   });
 
-  // Initial data loading
-  loadInfoBoxes();
-  loadMaterialInfo();
 })();
+
