@@ -13,11 +13,16 @@
   </head>
   <body>
     <div class="grid-con">
-      <div class="col-span-full">
+      <div class="col-span-full" id="info-boxes">
         <model-viewer id="model" src="model/earbuds.gltf" ar ar-modes="webxr scene-viewer quick-look" ios-src="model/earbuds.usdz" camera-controls poster="images/poster.webp" shadow-intensity="1" environment-image="images/aircraft_workshop_01_1k.hdr" exposure="1.7" camera-orbit="52.34deg 88.29deg 874.8m" field-of-view="30deg">
 
           <button class="Hotspot" slot="hotspot-1" data-position="22.114881038306805m 76.41863141465969m 92.72411936367459m" data-normal="0m 3.422854333301474e-8m 0.9999999999999996m" data-visibility-attribute="visible">
               <div class="HotspotAnnotation" id="hotspot-1">
+                <template id="hotspot-template">
+                  <img src="" class="hotspot-img">
+                  <h2 class="title-hotspot"></h2>
+                  <p class="p-hotspot"></p>
+                </template>
               </div>
           </button>
           
@@ -44,9 +49,11 @@
         </model-viewer>
       </div>
 
-      <div class="col-span-full">
-        <h2>Materials</h2>
-        <ul id="material-list"></ul>
+      <div class="col-span-full" id="material-con">
+        <h1>Materials</h1>
+        <ul id="material-list">
+          <!-- Copies of template -->
+        </ul>
 
         <template id="material-template">
           <li>
@@ -55,16 +62,8 @@
           </li>
         </template>
 
-        <div id="loading-spinner">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150">
-          <path fill="none" stroke="#000000" stroke-width="15" stroke-linecap="round" stroke-dasharray="300 385" stroke-dashoffset="0" d="M275 75c0 31-27 50-50 50-58 0-92-100-150-100-28 0-50 22-50 50s23 50 50 50c58 0 92-100 150-100 24 0 50 19 50 50Z">
-          <animate attributeName="stroke-dashoffset" calcMode="spline" dur="2" values="685;-685" keySplines="0 0 1 1" repeatCount="indefinite">
-          </animate>
-          </path>
-          </svg>
-        </div>
-
       </div>
+
     </div>  
     <!-- Loads <model-viewer> for browsers: -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js"></script>
