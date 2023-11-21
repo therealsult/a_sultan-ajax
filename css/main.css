@@ -1,5 +1,7 @@
+ 
 p, h1, h2, h3 {
   font-family: "Open Sans", Arial, sans-serif;
+  color: #000;
 }
 
 p {
@@ -27,7 +29,7 @@ model-viewer {
   width: auto;
   max-width: 1200px;
   height: 700px;
-  background-color: #12181b;
+  background-color: #ffffff;
   margin: 0 auto;
 }
 
@@ -151,25 +153,11 @@ model-viewer > #ar-prompt > img {
   animation: circle 4s linear infinite;
 }
 
+
+
 .spinner {
   height: 440px;
-  background: url(../images/spinner.svg) center no-repeat;
-}
-
-body {
-  background-color: #12181b;
-}
-
-p {
-  color: white;
-}
-
-h1 {
-  color: white;
-}
-
-h3 {
-  color: white;
+  background: url(../images/ball-triangle.svg) center no-repeat;
 }
 
 ul {

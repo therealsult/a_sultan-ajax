@@ -6,6 +6,7 @@
 
   const hotspotTemplate = document.querySelector("#hotspot-template");
 
+  
   const materialTemplate = document.querySelector("#material-template");
   const materialList = document.querySelector("#material-list");
 
@@ -63,8 +64,7 @@
 
     materialCon.classList.add("spinner");
 
-    //Using fetch to connect with Marco's API
-    fetch("https://swiftpixel.com/earbud/api/materials")
+     fetch("https://swiftpixel.com/earbud/api/materials")
     .then(response => response.json())
     .then(materialInfo => {
       console.log(materialInfo);
